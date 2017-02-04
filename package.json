@@ -1,0 +1,23 @@
+{
+  "name": "ecommercebot",
+  "version": "1.0.0",
+  "description": "Scenario 7",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liliankasem/eCommerceBot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/liliankasem/eCommerceBot/issues"
+  },
+  "homepage": "https://github.com/liliankasem/eCommerceBot#readme",
+  "dependencies": {
+    "botbuilder": "^3.6.0",
+    "restify": "^4.3.0"
+  }
+}
