@@ -2,7 +2,7 @@ module.exports = function () {
     bot.dialog('/showResults', [
         function (session, args) {
             var msg = new builder.Message(session).attachmentLayout(builder.AttachmentLayout.carousel);
-                args.result['value'].forEach(function (musician, i) {
+                args.result['value'].forEach(function (category, i) {
                     msg.addAttachment(
                         new builder.HeroCard(session)
                             .title(musician.Name)
