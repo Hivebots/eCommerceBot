@@ -5,7 +5,6 @@ require('./dialogs/productExplorer.js')();
 require('./dialogs/productSearch.js')();
 require('./dialogs/results.js')();
 
-
 var intents = new builder.IntentDialog();
 bot.dialog('/', intents);
 
