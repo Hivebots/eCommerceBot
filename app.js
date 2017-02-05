@@ -21,7 +21,7 @@ intents.onDefault(
 
 bot.dialog('/promptButtons', [
     function (session) {
-        var choices = ["Explorer", "Search"]
+        var choices = ["Explorer", "Search","Attach"]
         builder.Prompts.choice(session, "How would you like to explore our shop?", choices);
     },
     function (session, results) {
@@ -34,6 +34,9 @@ bot.dialog('/promptButtons', [
                     break;
                 case "Search":
                     session.replaceDialog('/productSearch');
+                    break;
+                case "Attach":
+                    session.replaceDialog('/attach');
                     break;
                 default:
                     session.reset('/');
