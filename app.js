@@ -23,7 +23,7 @@ intents.onDefault(
 bot.dialog('/promptButtons', [
     function (session) {
         var choices = ["Explorer", "Search"]
-        builder.Prompts.choice(session, "How would you like to explore our shop?", choices);
+        builder.Prompts.choice(session, "How would you like to explore our shop?", choices, { listStyle: builder.ListStyle.button });
     },
     function (session, results) {
         if (results.response) {

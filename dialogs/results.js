@@ -9,6 +9,7 @@ module.exports = function () {
                             .subtitle("Product No.: " + product.ProductNumber)
                             .text("Color: " + product.Color + " | " + "Size: " + product.Size + " | " + "Price: $" + product.StandardCost )
                     );
+                    
                 })
                 session.endDialog(msg);
         }
