@@ -3,6 +3,7 @@ require('./connectorSetup.js')();
 require('./searchHelpers.js')();
 require('./dialogs/productExplorer.js')();
 require('./dialogs/productSearch.js')();
+require('./dialogs/attach.js')();
 
 
 var intents = new builder.IntentDialog();

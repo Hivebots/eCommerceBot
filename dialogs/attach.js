@@ -11,7 +11,6 @@ module.exports = function () {
                     contentType: contentType,
                     name: attachmentFileName
                 });
-
     session.send(msg);
 }
     ])
