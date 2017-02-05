@@ -1,4 +1,4 @@
-module.exports = function () {
+module.exports = function () {   
     bot.dialog('/productExplorer', [
         function (session) {
             //Syntax for faceting results by 'ParentProductCategoryID'
@@ -14,7 +14,7 @@ module.exports = function () {
                         categoryNames.push(category['value'] + " (" + category.count + ")");
                     })    
                     //Prompts the user to select the Parent Category he/she is interested in
-                    builder.Prompts.choice(session, "Which category are you interested in?", categoryNames);
+                    builder.Prompts.choice(session, "Which category are you interested in?", categoryNames, { listStyle: builder.ListStyle.button });
                 } else {
                     session.endDialog("I couldn't find anything in that category to show you");
                 }
@@ -42,7 +42,7 @@ module.exports = function () {
                      session.userData.categories = categories;
 
                     //Prompts the user to select the era he/she is interested in
-                    builder.Prompts.choice(session, "Which category are you interested in?", categoryNames);
+                    builder.Prompts.choice(session, "Which category are you interested in?", categoryNames, { listStyle: builder.ListStyle.button });
                 } else {
                     session.endDialog("I couldn't find any products to show you");
                 }
@@ -77,7 +77,7 @@ module.exports = function () {
                         categoryNames.push(category['value']);
                     })    
                     //Prompts the user to select the era he/she is interested in
-                    builder.Prompts.choice(session, "Which colour are you interested in?", categoryNames);
+                    builder.Prompts.choice(session, "Which colour are you interested in?", categoryNames, { listStyle: builder.ListStyle.button });
                 } else {
                     session.endDialog("I couldn't find any products to show you");
                 }

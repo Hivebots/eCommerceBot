@@ -6,8 +6,8 @@ module.exports = function () {
                     msg.addAttachment(
                         new builder.HeroCard(session)
                             .title(product.Name)
-                            .subtitle("Price: $" + product.StandardCost + " | " + "Product No.: " + product.ProductNumber)
-                            .text("Color: " + product.Color + " | " + "Size: " + product.Size )
+                            .subtitle("Product No.: " + product.ProductNumber)
+                            .text("Color: " + product.Color + " | " + "Size: " + product.Size + " | " + "Price: $" + product.StandardCost )
                     );
                 })
                 session.endDialog(msg);
