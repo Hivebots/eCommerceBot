@@ -1,3 +1,44 @@
+
+module.exports = function () {
+
+    bot.beginDialogAction('Payment', '/payment', { matches: /^Payment/i });
+
+    bot.dialog('/showResults', [
+        function (session, args) {
+            let returnUrl = createUrl('approvalComplete', session.message.address);
+            let cancelUrl = createUrl('cancelPayment', session.message.address);
+            let paymentJson = createPaymentJson(returnUrl, cancelUrl);
+
+            paypal.payment.create(paymentJson, function (error, payment) {
+                if (error) {
+                    console.log(error);
+                    throw error;
+                } else {
+                    for (var index = 0; index < payment.links.length; index++) {
+                        if (payment.links[index].rel === 'approval_url') {
+                            var msg = new builder.Message(session).attachmentLayout(builder.AttachmentLayout.carousel);
+                            args.result['value'].forEach(function (product, i) {
+                                msg.addAttachment(
+                                    new builder.HeroCard(session)
+                                        .title(product.Name)
+                                        .subtitle("Product No.: " + product.ProductNumber)
+                                        .text("Color: " + product.Color + " | " + "Size: " + product.Size + " | " + "Price: $" + product.StandardCost )
+                                        .buttons([
+                                            builder.CardAction.openUrl(session, payment.links[index].href, "Buy Now via Paypal")
+                                        ])
+                                );
+                            })
+                            session.endDialog(msg);
+                        }
+                    }
+                }
+            });
+            
+        }
+    ]);
+
+
+
 // Configure the paypal module with a client id and client secret that you
 // generate from https://developer.paypal.com/
 paypal.configure({
@@ -215,40 +256,5 @@ function cancelledPayment (parameters) {
     bot.send(message.toMessage());
 }
 
-module.exports = function () {
-    bot.beginDialogAction('Payment', '/payment', { matches: /^Payment/i });
 
-    bot.dialog('/showResults', [
-        function (session, args) {
-            let returnUrl = createUrl('approvalComplete', session.message.address);
-            let cancelUrl = createUrl('cancelPayment', session.message.address);
-            let paymentJson = createPaymentJson(returnUrl, cancelUrl);
-
-            paypal.payment.create(paymentJson, function (error, payment) {
-                if (error) {
-                    console.log(error);
-                    throw error;
-                } else {
-                    for (var index = 0; index < payment.links.length; index++) {
-                        if (payment.links[index].rel === 'approval_url') {
-                            var msg = new builder.Message(session).attachmentLayout(builder.AttachmentLayout.carousel);
-                            args.result['value'].forEach(function (product, i) {
-                                msg.addAttachment(
-                                    new builder.HeroCard(session)
-                                        .title(product.Name)
-                                        .subtitle("Product No.: " + product.ProductNumber)
-                                        .text("Color: " + product.Color + " | " + "Size: " + product.Size + " | " + "Price: $" + product.StandardCost )
-                                        .buttons([
-                                            builder.CardAction.openUrl(session, payment.links[index].href, "Buy Now via Paypal")
-                                        ])
-                                );
-                            })
-                            session.endDialog(msg);
-                        }
-                    }
-                }
-            });
-            
-        }
-    ])
 }
