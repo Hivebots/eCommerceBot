@@ -2,16 +2,22 @@ module.exports = function () {
     bot.dialog('/productExplorer', [
         function (session) {
             //Syntax for faceting results by 'ParentProductCategoryID'
-            var queryString = searchQueryStringBuilder('facet=ParentProductCategoryID', "category");
+            var queryString = searchQueryStringBuilder('', "category");
             performSearchQuery(queryString, function (err, result) {
                 if (err) {
                     console.log("Error when faceting by Parent Product Category:" + err);
-                } else if (result && result['@search.facets'] && result['@search.facets'].ParentProductCategoryID) {
-                    categories = result['@search.facets'].ParentProductCategoryID;
+                } else if (result) {
+                    var categories = result['value'];
                     var categoryNames = [];
+
+                    session.userData.rootCategories = categories;
+
                     //Pushes the name of each Parent Category into an array
                     categories.forEach(function (category, i) {
-                        categoryNames.push(category['value'] + " (" + category.count + ")");
+                        if(category.ParentProductCategoryID == null){
+                            categoryNames.push(category.Name);
+                        }
+                        
                     })    
                     //Prompts the user to select the Parent Category he/she is interested in
                     builder.Prompts.choice(session, "Which category are you interested in?", categoryNames, { listStyle: builder.ListStyle.button });
@@ -23,10 +29,18 @@ module.exports = function () {
 
         function (session, results) {
             //Chooses just the Category name - parsing out the count
-            var category = results.response.entity.split(' ')[0];;
+            var rCategories = session.userData.rootCategories;
+            var userResponse = results.response.entity;
+            var productID = 0;
+
+            rCategories.forEach(function (category, i) {
+                if(category.Name == userResponse){
+                    productID = category.ProductCategoryID;
+                }
+            })
 
             //Syntax for filtering results by 'era'. Note the $ in front of filter (OData syntax)
-            var queryString = searchQueryStringBuilder('$filter=ParentProductCategoryID eq ' + category,  "category");
+            var queryString = searchQueryStringBuilder('$filter=ParentProductCategoryID eq ' + productID,  "category");
 
             performSearchQuery(queryString, function (err, result) {
                 if (err) {
