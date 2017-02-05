@@ -18,6 +18,7 @@
   "homepage": "https://github.com/liliankasem/eCommerceBot#readme",
   "dependencies": {
     "botbuilder": "^3.6.0",
+    "opn": "^4.0.2",
     "paypal-rest-sdk": "^1.7.1",
     "request": "^2.79.0",
     "restify": "^4.3.0"

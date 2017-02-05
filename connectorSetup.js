@@ -4,6 +4,7 @@ module.exports = function () {
     global.builder = require('botbuilder');
     global.paypal = require('paypal-rest-sdk');
     global.url = require('url');
+    global.opn = require('opn');
 
     //If testing via the emulator, no need for appId and appPassword. If publishing, enter appId and appPassword here 
     var connector = new builder.ChatConnector({
