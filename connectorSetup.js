@@ -1,7 +1,9 @@
 module.exports = function () {
 
-    var restify = require('restify');
+    global.restify = require('restify');
     global.builder = require('botbuilder');
+    global.paypal = require('paypal-rest-sdk');
+    global.url = require('url');
 
     //If testing via the emulator, no need for appId and appPassword. If publishing, enter appId and appPassword here 
     var connector = new builder.ChatConnector({
