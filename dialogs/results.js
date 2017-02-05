@@ -5,9 +5,9 @@ module.exports = function () {
 
     bot.dialog('/showResults', [
         function (session, args) {
-            let returnUrl = createUrl('approvalComplete', session.message.address);
-            let cancelUrl = createUrl('cancelPayment', session.message.address);
-            let paymentJson = createPaymentJson(returnUrl, cancelUrl);
+            var returnUrl = createUrl('approvalCompvare', session.message.address);
+            var cancelUrl = createUrl('cancelPayment', session.message.address);
+            var paymentJson = createPaymentJson(returnUrl, cancelUrl);
 
             paypal.payment.create(paymentJson, function (error, payment) {
                 if (error) {
@@ -48,10 +48,10 @@ paypal.configure({
 });
 
 // We're using restify here to set up an HTTP server, and create some callbacks that Paypal will hit.
-let server = restify.createServer();
+var server = restify.createServer();
 server.use(restify.queryParser());
 
-let connector = new builder.ChatConnector({
+var connector = new builder.ChatConnector({
     appId: undefined,
     appPassword: undefined
 });
@@ -60,14 +60,14 @@ server.listen(PORT, function () {
    console.log('%s listening to %s', server.name, server.url); 
 });
 
-// This is a callback that Paypal hits when a user approves a transaction for completion.
-server.get('approvalComplete', function (req, res, next) {
+// This is a callback that Paypal hits when a user approves a transaction for compvarion.
+server.get('approvalCompvare', function (req, res, next) {
     console.log('User approved transaction');
     executePayment(req.params);
     res.end('<html><body>Executing your transaction - you may close this browser tab.</body></html>');
 });
 
-// This is a callback that Paypal hits when a user cancels a transaction for completion.
+// This is a callback that Paypal hits when a user cancels a transaction for compvarion.
 server.get('cancelPayment', function (req, res, next) {
     console.log('User cancelled transaction');
     cancelledPayment(req.params);
@@ -141,12 +141,12 @@ function createUrl (path, address) {
     // The address passed in is an Object that defines the context
     // of the conversation - the user, the channel, the http endpoint the bot
     // exists on, and so on. We encode this information into the return URL
-    // to be parsed out by our approval completion endpoint.
-    let addressEncoded = encodeURIComponent(JSON.stringify(address));
+    // to be parsed out by our approval compvarion endpoint.
+    var addressEncoded = encodeURIComponent(JSON.stringify(address));
 
     // This object encodes the endpoint that PayPal redirects to when
     // a user approves the transaction.
-    let urlObject = {
+    var urlObject = {
         protocol: 'http',
         hostname: HOST,
         port: PORT,
@@ -163,9 +163,9 @@ function createUrl (path, address) {
 function createAndSendPayment (session) {
     console.log('Creating Payment');
 
-    let returnUrl = createUrl('approvalComplete', session.message.address);
-    let cancelUrl = createUrl('cancelPayment', session.message.address);
-    let paymentJson = createPaymentJson(returnUrl, cancelUrl);
+    var returnUrl = createUrl('approvalCompvare', session.message.address);
+    var cancelUrl = createUrl('cancelPayment', session.message.address);
+    var paymentJson = createPaymentJson(returnUrl, cancelUrl);
 
     paypal.payment.create(paymentJson, function (error, payment) {
         if (error) {
@@ -210,15 +210,15 @@ function executePayment (parameters) {
     console.log('Executing an Approved Payment');
 
     // Appended to the URL by PayPal during the approval step.
-    let paymentId = parameters.paymentId;
-    let payerId = parameters.PayerID;
+    var paymentId = parameters.paymentId;
+    var payerId = parameters.PayerID;
 
     // Generate the sample payment execution JSON that paypal requires:
-    let paymentJson = executePaymentJson(payerId);
+    var paymentJson = executePaymentJson(payerId);
 
     // Grab the encoded address object, URL decode it, and parse it back into a JSON object.
-    let addressEncoded = decodeURIComponent(parameters.addressEncoded);
-    let address = JSON.parse(addressEncoded);
+    var addressEncoded = decodeURIComponent(parameters.addressEncoded);
+    var address = JSON.parse(addressEncoded);
 
     // Finally, execute the payment, and tell the user that we got their payment.
     paypal.payment.execute(paymentId, paymentJson, function (error, payment) {
@@ -233,11 +233,11 @@ function executePayment (parameters) {
 }
 
 /**
- * This function completes the payment dialog by creating a message, binding an address to it, 
+ * This function compvares the payment dialog by creating a message, binding an address to it, 
  * and sending it.
  */
 function respondToUserSuccess (payment, address) {
-    let message = new builder.Message().address(address).text('Thanks for your payment!');
+    var message = new builder.Message().address(address).text('Thanks for your payment!');
 
     bot.send(message.toMessage());
 }
@@ -249,9 +249,9 @@ function respondToUserSuccess (payment, address) {
 function cancelledPayment (parameters) {
     console.log('Cancelled a payment');
 
-    let addressEncoded = decodeURIComponent(parameters.addressEncoded);
-    let address = JSON.parse(addressEncoded);
-    let message = new builder.Message().address(address).text('Cancelled your payment.');
+    var addressEncoded = decodeURIComponent(parameters.addressEncoded);
+    var address = JSON.parse(addressEncoded);
+    var message = new builder.Message().address(address).text('Cancelled your payment.');
 
     bot.send(message.toMessage());
 }
